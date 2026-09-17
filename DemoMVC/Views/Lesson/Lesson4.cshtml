@@ -1,0 +1,93 @@
+@{
+    ViewData["Title"] = "Định tuyến (Routing) trong .NET MVC";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-uppercase fw-bold text-primary">Tìm hiểu về Định tuyến (Routing) trong .NET MVC</h2>
+    <p class="text-center text-muted mb-5">Định tuyến là cơ chế khớp URL (đường dẫn mà người dùng gõ trên trình duyệt) với một Controller và Action cụ thể trong mã nguồn để xử lý yêu cầu.</p>
+
+    <!-- Nội dung 1: Cấu trúc URL -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-dark text-white">
+            <h4 class="h5 mb-0">1. Cấu trúc URL mặc định (Conventional Routing)</h4>
+        </div>
+        <div class="card-body bg-light">
+            <p>Trong MVC, cấu trúc URL mặc định thường được thiết lập trong file <code>Program.cs</code> (hoặc <code>Startup.cs</code>) theo mẫu sau:</p>
+            <div class="bg-dark text-light p-3 rounded mb-3">
+                <code>app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");</code>
+            </div>
+            
+            <h6 class="text-primary fw-bold">Phân tích các thành phần:</h6>
+            <ul>
+                <li><strong>{controller}:</strong> Tên của Controller sẽ xử lý request (Bỏ chữ "Controller" ở đuôi. VD: <code>ProductsController</code> -> <code>Products</code>). Mặc định là <code>Home</code>.</li>
+                <li><strong>{action}:</strong> Tên phương thức (hàm) bên trong Controller. Mặc định là <code>Index</code>.</li>
+                <li><strong>{id?}:</strong> Tham số tùy chọn (có dấu <code>?</code> nghĩa là có hoặc không đều được). Thường dùng để truyền ID của bản ghi (ví dụ: ID sản phẩm, ID bài viết).</li>
+            </ul>
+            
+            <div class="alert alert-info border-0 mb-0">
+                <strong>Ví dụ URL:</strong> <code>https://domain.com/Products/Details/5</code><br>
+                Hệ thống sẽ gọi Controller <strong>Products</strong>, thực thi Action <strong>Details</strong> và truyền tham số <strong>id = 5</strong> vào hàm đó.
+            </div>
+        </div>
+    </div>
+
+    <!-- Nội dung 2: Lỗi khi truy cập URL -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-dark text-white">
+            <h4 class="h5 mb-0">2. Các lỗi phổ biến khi truy cập URL trong MVC</h4>
+        </div>
+        <div class="card-body bg-light">
+            <p>Khi URL không hợp lệ hoặc cấu hình định tuyến sai, bạn sẽ thường gặp các lỗi sau:</p>
+            
+            <div class="list-group">
+                <div class="list-group-item bg-transparent border-bottom">
+                    <h6 class="text-danger fw-bold mb-1">Lỗi 404 Not Found (Không tìm thấy trang)</h6>
+                    <p class="mb-0 text-muted small"><strong>Nguyên nhân:</strong> Người dùng gõ sai URL, Controller/Action bị xóa, đổi tên, hoặc đường dẫn không khớp với bất kỳ quy tắc Routing nào đã định nghĩa.</p>
+                </div>
+                <div class="list-group-item bg-transparent border-bottom">
+                    <h6 class="text-warning text-dark fw-bold mb-1">Lỗi AmbiguousMatchException (Lỗi nhập nhằng)</h6>
+                    <p class="mb-0 text-muted small"><strong>Nguyên nhân:</strong> Có 2 Action trùng tên hoặc có cùng một cấu trúc URL mà bạn không chỉ định rõ HTTP Method (như <code>[HttpGet]</code> hay <code>[HttpPost]</code>), khiến hệ thống không biết phải chạy hàm nào.</p>
+                </div>
+                <div class="list-group-item bg-transparent">
+                    <h6 class="text-primary fw-bold mb-1">Lỗi thiếu tham số bắt buộc</h6>
+                    <p class="mb-0 text-muted small"><strong>Nguyên nhân:</strong> Action yêu cầu một tham số bắt buộc (ví dụ <code>public IActionResult Edit(int id)</code> - không có dấu chấm hỏi nullable), nhưng người dùng lại truy cập URL không có ID (ví dụ: <code>/Products/Edit/</code>).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nội dung 3: Cơ chế định tuyến [Route] -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-dark text-white">
+            <h4 class="h5 mb-0">3. Cơ chế định tuyến bằng Attribute (Attribute Routing)</h4>
+        </div>
+        <div class="card-body bg-light">
+            <p>Khác với Conventional Routing định nghĩa tập trung ở file cấu hình, <strong>Attribute Routing</strong> cho phép bạn gắn trực tiếp đường dẫn URL lên ngay trên đầu class Controller hoặc hàm Action bằng thẻ <code>[Route]</code>.</p>
+            <p>Cách này cực kỳ hữu ích để tạo các URL thân thiện với SEO, xây dựng RESTful API, hoặc ghi đè các luật định tuyến mặc định.</p>
+
+            <h6 class="text-primary fw-bold mt-3">Ví dụ áp dụng trong C#:</h6>
+            <div class="bg-dark text-light p-3 rounded mb-3">
+<pre class="mb-0"><code>[Route("cua-hang")]
+public class StoreController : Controller
+{
+    // URL truy cập: domain.com/cua-hang
+    [Route("")] 
+    public IActionResult Index() { ... }
+
+    // URL truy cập: domain.com/cua-hang/danh-sach-san-pham
+    [Route("danh-sach-san-pham")]
+    public IActionResult ListProducts() { ... }
+
+    // URL truy cập: domain.com/cua-hang/chi-tiet/laptop-dell-5
+    [Route("chi-tiet/{slug}-{id}")]
+    public IActionResult Details(string slug, int id) { ... }
+}</code></pre>
+            </div>
+            
+            <ul class="text-muted small mb-0">
+                <li>Đường dẫn URL không còn bị phụ thuộc vào tên thật của Controller hay Action trong code.</li>
+                <li>Hỗ trợ truyền các tham số linh hoạt (như <code>slug</code>, <code>id</code>) trực tiếp trên cấu trúc thẻ <code>[Route]</code>.</li>
+            </ul>
+        </div>
+    </div>
+</div>

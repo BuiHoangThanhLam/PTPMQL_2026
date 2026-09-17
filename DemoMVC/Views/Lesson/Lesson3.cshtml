@@ -1,0 +1,82 @@
+@{
+    ViewData["Title"] = "Kiến trúc .NET MVC";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-primary fw-bold">Tổng quan Kiến trúc ASP.NET Core MVC</h2>
+
+    <!-- 1. Các thành phần cốt lõi -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-dark text-white">
+            <h4 class="h5 mb-0">1. Các thành phần cốt lõi</h4>
+        </div>
+        <div class="card-body bg-light">
+            <div class="row text-center">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="p-4 border rounded bg-white h-100 shadow-sm">
+                        <h5 class="text-primary fw-bold">Model</h5>
+                        <p class="text-muted mb-0 small">Đại diện cho dữ liệu và logic nghiệp vụ. Tương tác với cơ sở dữ liệu qua Entity Framework Core.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="p-4 border rounded bg-white h-100 shadow-sm">
+                        <h5 class="text-success fw-bold">View</h5>
+                        <p class="text-muted mb-0 small">Giao diện người dùng (.cshtml). Sử dụng cú pháp Razor để hiển thị dữ liệu trực quan.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-4 border rounded bg-white h-100 shadow-sm">
+                        <h5 class="text-danger fw-bold">Controller</h5>
+                        <p class="text-muted mb-0 small">Trung tâm điều phối. Tiếp nhận request, gọi Model lấy dữ liệu và truyền sang View.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Luồng hoạt động -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-dark text-white">
+            <h4 class="h5 mb-0">2. Luồng hoạt động (Lifecycle)</h4>
+        </div>
+        <div class="card-body bg-light">
+            <ol class="list-group list-group-numbered list-group-flush border rounded">
+                <li class="list-group-item bg-transparent">Trình duyệt gửi yêu cầu HTTP (URL/Action).</li>
+                <li class="list-group-item bg-transparent">Hệ thống Routing hướng yêu cầu đến đúng <strong>Controller</strong>.</li>
+                <li class="list-group-item bg-transparent">Controller gọi <strong>Model</strong> để lấy hoặc xử lý dữ liệu.</li>
+                <li class="list-group-item bg-transparent">Model thực hiện truy vấn cơ sở dữ liệu và trả kết quả về.</li>
+                <li class="list-group-item bg-transparent">Controller đóng gói dữ liệu (thường qua ViewModel) và gửi sang <strong>View</strong>.</li>
+                <li class="list-group-item bg-transparent">View kết hợp dữ liệu với HTML/CSS và phản hồi lại trình duyệt.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- 3. Ví dụ minh họa -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-dark text-white">
+            <h4 class="h5 mb-0">3. Ví dụ: Hệ thống quản lý kho thiết bị</h4>
+        </div>
+        <div class="card-body bg-light">
+            <ul class="mb-0 text-muted">
+                <li class="mb-2"><strong class="text-dark">Model:</strong> Lớp <code>Device</code> quy định các thuộc tính <code>Id</code>, <code>Name</code>, <code>StockQuantity</code>.</li>
+                <li class="mb-2"><strong class="text-dark">Controller:</strong> <code>InventoryController</code> có hàm <code>Index()</code> truy vấn EF Core lấy danh sách thiết bị.</li>
+                <li><strong class="text-dark">View:</strong> File <code>Index.cshtml</code> dùng vòng lặp <code>@@foreach</code> dựng bảng HTML hiển thị tình trạng kho hàng.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 4. Ưu điểm -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white">
+            <h4 class="h5 mb-0">4. Ưu điểm nổi bật</h4>
+        </div>
+        <div class="card-body bg-light">
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-primary px-3 py-2 fs-6">Separation of Concerns</span>
+                <span class="badge bg-success px-3 py-2 fs-6">Dễ bảo trì & Mở rộng</span>
+                <span class="badge bg-info text-dark px-3 py-2 fs-6">Hỗ trợ Unit Test</span>
+                <span class="badge bg-secondary px-3 py-2 fs-6">URL thân thiện SEO</span>
+            </div>
+        </div>
+    </div>
+</div>
