@@ -1,0 +1,17 @@
+<!-- Nhận dữ liệu từ Controller gửi sang qua túi ViewBag -->
+<h2>@ViewBag.Title</h2>
+
+<div class="alert alert-info">
+    @ViewBag.Message
+</div>
+
+<!-- Gửi dữ liệu về Controller -->
+<form asp-action="Search" method="post">
+    <div class="mb-3">
+        <label>Từ khóa tìm kiếm:</label>
+        <!-- Quan trọng: Thuộc tính name="keyword" bắt buộc phải khớp với tên tham số (string keyword) ở Controller -->
+        <input type="text" name="keyword" value="@ViewBag.OldKeyword" class="form-control" />
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Gửi lên Controller</button>
+</form>

@@ -1,0 +1,211 @@
+@{
+    ViewData["Title"] = "Chuyên đề: Luồng dữ liệu trong ASP.NET Core MVC";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="text-center mb-5">
+        <h2 class="text-uppercase fw-bold text-primary">Cơ chế truyền nhận dữ liệu trong MVC</h2>
+        <p class="text-muted">Tài liệu chi tiết về vòng đời dữ liệu, các phương thức giao tiếp và ví dụ thực tiễn trong hệ thống quản lý kho.</p>
+    </div>
+
+    <!-- Phần 1: Lý thuyết chuyên sâu -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-dark text-white">
+            <h4 class="h5 mb-0"><i class="bi bi-book"></i> 1. Bản chất giao tiếp dữ liệu giữa Controller, View và Model</h4>
+        </div>
+        <div class="card-body bg-light">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 border bg-white rounded h-100 border-primary border-start border-4">
+                        <h5 class="fw-bold text-primary">Model (Khuôn mẫu)</h5>
+                        <p class="text-muted small mb-0">Đóng vai trò là "vật chứa" mang dữ liệu. Nó định nghĩa cấu trúc (ví dụ: mã thiết bị, tên, số lượng tồn kho) và các quy tắc kiểm tra tính hợp lệ (Data Annotations) trước khi dữ liệu được Controller nạp vào cơ sở dữ liệu.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 border bg-white rounded h-100 border-success border-start border-4">
+                        <h5 class="fw-bold text-success">View (Giao diện)</h5>
+                        <p class="text-muted small mb-0">Chỉ chịu trách nhiệm "trình bày" dữ liệu nhận được từ Controller. Đồng thời, View chứa các Form (nhập liệu) để gom gói thông tin người dùng nhập, chuẩn bị đẩy ngược về Controller thông qua HTTP POST.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 border bg-white rounded h-100 border-danger border-start border-4">
+                        <h5 class="fw-bold text-danger">Controller (Điều phối)</h5>
+                        <p class="text-muted small mb-0">Nhận dữ liệu thô từ View, kiểm tra logic, gọi DbContext để thao tác với SQL Server, sau đó đóng gói kết quả mới vào Model và quyết định trả về View nào để người dùng xem tiếp.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phần 2: Các kỹ thuật truyền dữ liệu -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-dark text-white">
+            <h4 class="h5 mb-0"><i class="bi bi-arrow-left-right"></i> 2. Các kỹ thuật gửi nhận dữ liệu phổ biến</h4>
+        </div>
+        <div class="card-body bg-white p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Kỹ thuật</th>
+                        <th>Cách hoạt động</th>
+                        <th>Ưu / Nhược điểm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fw-bold text-primary">Strongly-typed Model</td>
+                        <td>Truyền trực tiếp một Object class từ Controller sang View bằng lệnh <code>return View(model)</code>.</td>
+                        <td><span class="badge bg-success">Ưu:</span> An toàn, có nhắc lệnh (IntelliSense), dễ kiểm thử.<br><span class="badge bg-danger">Nhược:</span> Chỉ truyền được 1 kiểu Model duy nhất cho mỗi View.</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">ViewBag</td>
+                        <td>Biến động (dynamic property) giúp đính kèm dữ liệu lẻ tẻ. <code>ViewBag.Title = "Kho hàng";</code></td>
+                        <td><span class="badge bg-success">Ưu:</span> Nhanh gọn, không cần ép kiểu.<br><span class="badge bg-danger">Nhược:</span> Dễ gõ sai tên biến, không bắt lỗi lúc biên dịch (Run-time error).</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">ViewData</td>
+                        <td>Lưu dữ liệu dạng Dictionary (Key-Value). <code>ViewData["Message"] = "Thành công";</code></td>
+                        <td><span class="badge bg-success">Ưu:</span> Hỗ trợ tốt trong .NET cũ.<br><span class="badge bg-danger">Nhược:</span> Bắt buộc phải ép kiểu (Type Casting) khi lôi ra dùng.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Phần 3: Ví dụ minh họa -->
+    <h3 class="fw-bold text-primary mb-3">3. Ví dụ minh họa: Phân hệ Quản lý thiết bị</h3>
+    
+    <div class="row">
+        <!-- Ví dụ 1 -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-secondary text-white fw-bold">
+                    Ví dụ 1: Gửi dữ liệu lặt vặt (Controller -> View)
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">Sử dụng ViewBag để truyền các thông báo hệ thống hoặc tiêu đề mà không cần dùng đến Model phức tạp.</p>
+                    
+                    <h6 class="fw-bold mt-3">Mã tại Controller:</h6>
+                    <pre class="bg-dark text-light p-3 rounded small"><code>public IActionResult Dashboard()
+{
+    // Gửi dữ liệu đơn giản sang View
+    ViewBag.TotalDevices = 150;
+    ViewBag.WarningMessage = "Có 5 thiết bị sắp hết hàng!";
+    
+    return View();
+}</code></pre>
+                    
+                    <h6 class="fw-bold mt-3">Nhận tại View (Dashboard.cshtml):</h6>
+                    <pre class="bg-dark text-light p-3 rounded small"><code>&lt;h3&gt;Tổng thiết bị: @@ViewBag.TotalDevices&lt;/h3&gt;
+&lt;div class="alert alert-warning"&gt;
+    @@ViewBag.WarningMessage
+&lt;/div&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ví dụ 2 -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white fw-bold">
+                    Ví dụ 2: Gửi nhận dữ liệu quy chuẩn qua Model
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">Đây là phương pháp chuẩn (Strongly-typed) khi thao tác với cơ sở dữ liệu Entity Framework Core.</p>
+
+                    <h6 class="fw-bold mt-3">Đóng gói tại Controller:</h6>
+                    <pre class="bg-dark text-light p-3 rounded small"><code>public IActionResult Index()
+{
+    // Lấy dữ liệu từ DB bọc vào List Model
+    var devices = new List&lt;Device&gt;
+    {
+        new Device { Id = 1, Name = "Laptop Dell XPS", Stock = 12 },
+        new Device { Id = 2, Name = "Màn hình LG 24inch", Stock = 5 }
+    };
+    
+    // Gửi nguyên cục Model sang View
+    return View(devices);
+}</code></pre>
+
+                    <h6 class="fw-bold mt-3">Hiển thị tại View (Index.cshtml):</h6>
+                    <pre class="bg-dark text-light p-3 rounded small"><code>@@model IEnumerable&lt;YourApp.Models.Device&gt;
+
+&lt;table class="table"&gt;
+    @@foreach (var item in Model)
+    {
+        &lt;tr&gt;
+            &lt;td&gt;@@item.Name&lt;/td&gt;
+            &lt;td&gt;Tồn kho: @@item.Stock&lt;/td&gt;
+        &lt;/tr&gt;
+    }
+&lt;/table&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Phần 4: Vòng đời dữ liệu khép kín (Cách 3 thành phần giao tiếp) -->
+<div class="card shadow-sm border-0 mb-5 mt-5">
+    <div class="card-header bg-dark text-white">
+        <h4 class="h5 mb-0"><i class="bi bi-diagram-3"></i> 4. Phân tích luồng dữ liệu 2 chiều giữa M-V-C</h4>
+    </div>
+    <div class="card-body bg-light">
+        <p class="text-muted mb-4">Để hiểu rõ cách dữ liệu luân chuyển, chúng ta xét một kịch bản thực tế: <strong>Người dùng điền Form thêm mới một thiết bị vào kho hàng</strong>.</p>
+
+        <div class="timeline-steps">
+            <!-- Bước 1: View -> Controller -->
+            <div class="mb-4">
+                <h6 class="fw-bold text-success">Bước 1: View -> Controller (Gửi yêu cầu & Dữ liệu thô)</h6>
+                <p class="small text-muted mb-1">Người dùng nhập tên thiết bị, số lượng vào các ô input trên giao diện HTML và bấm nút "Lưu".</p>
+                <p class="small text-muted mb-2">Trình duyệt sẽ gom các thông tin này lại và gửi một <strong>HTTP POST Request</strong> về Controller.</p>
+                <div class="bg-dark text-light p-2 rounded small">
+                    <code>&lt;form asp-action="Create" method="post"&gt; ... &lt;/form&gt;</code>
+                </div>
+            </div>
+
+            <!-- Bước 2: Controller -> Model -->
+            <div class="mb-4">
+                <h6 class="fw-bold text-danger">Bước 2: Controller -> Model (Model Binding & Xử lý nghiệp vụ)</h6>
+                <p class="small text-muted mb-1">Controller nhận Request. Nhờ cơ chế <strong>Model Binding</strong>, .NET tự động gán các giá trị từ Form vào các thuộc tính của một đối tượng Model (ví dụ: class <code>Device</code>).</p>
+                <p class="small text-muted mb-2">Controller kiểm tra dữ liệu có hợp lệ không (Data Annotations như <code>[Required]</code>). Nếu OK, nó sẽ gọi công cụ ORM (như Entity Framework Core) để đẩy Model này vào cơ sở dữ liệu.</p>
+                <div class="bg-dark text-light p-2 rounded small">
+<pre class="mb-0"><code>[HttpPost]
+public IActionResult Create(Device model) 
+{
+    if (ModelState.IsValid) {
+        _context.Devices.Add(model); // Controller ra lệnh cho DB qua EF Core
+        _context.SaveChanges();
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <!-- Bước 3: Model -> Controller -->
+            <div class="mb-4">
+                <h6 class="fw-bold text-primary">Bước 3: Model -> Controller (Trả về kết quả truy vấn)</h6>
+                <p class="small text-muted mb-1">Sau khi lưu xong, Controller cần hiển thị lại danh sách kho hàng. Nó ra lệnh cho <code>_context</code> lấy toàn bộ dữ liệu từ SQL Server.</p>
+                <p class="small text-muted mb-0">Model lúc này đóng vai trò là danh sách các bản ghi (List) được Entity Framework Core trả ngược lại cho Controller nạp vào bộ nhớ.</p>
+            </div>
+
+            <!-- Bước 4: Controller -> View -->
+            <div class="mb-2">
+                <h6 class="fw-bold text-warning text-dark">Bước 4: Controller -> View (Đóng gói và Hiển thị)</h6>
+                <p class="small text-muted mb-1">Controller không in trực tiếp dữ liệu ra màn hình. Nó bọc danh sách Model vừa nhận được, truyền qua lệnh <code>return View(danhSach)</code>.</p>
+                <p class="small text-muted mb-0">View nhận danh sách này, dùng cú pháp Razor (Tag Helpers, vòng lặp LINQ) để sinh ra mã HTML tĩnh và gửi về cho trình duyệt của người dùng.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Phần 5: Khái niệm nâng cao - ViewModel -->
+<div class="card shadow-sm border-0 border-start border-5 border-info mb-5">
+    <div class="card-body">
+        <h5 class="fw-bold text-info text-dark">Khái niệm thực chiến: ViewModel (Mảnh ghép còn thiếu)</h5>
+        <p class="small text-muted mb-2">Trong thực tế phát triển phần mềm, Database Model (như class <code>Device</code> ánh xạ từ SQL) thường chứa rất nhiều trường dữ liệu nhạy cảm hoặc thừa thãi mà ta không muốn gửi hết sang View.</p>
+        <p class="small text-muted mb-2">Giải pháp là tạo ra <strong>ViewModel</strong> (Ví dụ: <code>DeviceCreateViewModel</code>). Đây là một class trung gian, chỉ chứa đúng những thuộc tính cần thiết để hiển thị trên màn hình đó hoặc để nhận từ Form.</p>
+        <ul class="small text-muted mb-0">
+            <li><strong>Luồng đi thực tế:</strong> View <-> <strong>ViewModel</strong> <-> Controller <-> <strong>Model</strong> <-> Database.</li>
+            <li>ViewModel giúp bảo mật mã nguồn, dễ dàng thêm các trường dữ liệu tùy chỉnh (như danh sách Dropdown) mà không làm bẩn cấu trúc của Database Model gốc.</li>
+        </ul>
+    </div>
+</div>
+</div>
