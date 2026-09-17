@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"] = "Kiến thức và Quy trình CI/CD";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-uppercase fw-bold">Quy trình triển khai tự động CI/CD cho dự án .NET</h2>
+
+    <!-- Phần 1 -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="h5 mb-0">1. Đăng ký hosting và domain (Chuẩn bị hạ tầng)</h4>
+        </div>
+        <div class="card-body bg-light">
+            <h6 class="text-primary fw-bold">Kiến thức & Cách hoạt động</h6>
+            <p><strong>Hosting</strong> là không gian lưu trữ trên máy chủ thực tế, nơi mã nguồn đã được biên dịch (file DLL) và database được đặt để chạy 24/7. <strong>Domain</strong> là địa chỉ định tuyến người dùng đến hosting đó. Đối với .NET, hosting bắt buộc phải chạy hệ điều hành Windows Server và hỗ trợ IIS.</p>
+            
+            <h6 class="text-primary fw-bold mt-3">Quy trình thực hiện</h6>
+            <ul class="mb-0">
+                <li>Đăng ký tài khoản tại nhà cung cấp hosting (ví dụ: MonsterASP.net).</li>
+                <li>Tạo một Web Site/App trên bảng điều khiển của nhà cung cấp và liên kết domain.</li>
+                <li>Trích xuất 3 thông tin cực kỳ quan trọng để cấu hình triển khai tự động sau này: <strong>Địa chỉ FTP Server</strong>, <strong>FTP Username</strong>, và <strong>FTP Password</strong>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Phần 2 -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="h5 mb-0">2. Tạo dự án .Net MVC (Phát triển và Quản lý mã nguồn)</h4>
+        </div>
+        <div class="card-body bg-light">
+            <h6 class="text-primary fw-bold">Kiến thức & Cách hoạt động</h6>
+            <p>Dự án .NET MVC (Model-View-Controller) tách biệt logic xử lý, giao diện và dữ liệu. Để áp dụng CI/CD, mã nguồn không được để rải rác trên máy cá nhân mà phải được đưa vào hệ thống <strong>Version Control (Quản lý phiên bản)</strong> như Git. Git đóng vai trò là "điểm kích hoạt" (trigger) cho toàn bộ quy trình tự động hóa.</p>
+            
+            <h6 class="text-primary fw-bold mt-3">Quy trình thực hiện</h6>
+            <ul class="mb-0">
+                <li>Lập trình dự án bằng Visual Studio Code và đảm bảo ứng dụng chạy tốt ở môi trường Localhost.</li>
+                <li>Khởi tạo Git cục bộ (<code>git init</code>) và tạo file <code>.gitignore</code> để loại trừ các file rác hoặc các file cấu hình chứa mật khẩu nhạy cảm.</li>
+                <li>Tạo một Repository (kho lưu trữ) trên GitHub.</li>
+                <li>Commit và Đẩy (Push) toàn bộ mã nguồn lên nhánh chính (thường là <code>main</code> hoặc <code>master</code>) trên GitHub.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Phần 3 -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="h5 mb-0">3. Thiết lập quy trình tự động hoá CI/CD</h4>
+        </div>
+        <div class="card-body bg-light">
+            <h6 class="text-primary fw-bold">Kiến thức & Cách hoạt động</h6>
+            <p>
+                <strong>CI (Continuous Integration - Tích hợp liên tục):</strong> Hệ thống (như GitHub Actions) tự động tạo ra một máy ảo, kéo mã nguồn mới nhất về và chạy lệnh biên dịch (Build). Nó đảm bảo code mới không làm sập (crash) hệ thống hiện tại.<br>
+                <strong>CD (Continuous Deployment - Triển khai liên tục):</strong> Ngay sau khi biên dịch thành công, hệ thống sử dụng các thông tin FTP (đã lấy ở bước 1) để kết nối thẳng vào Hosting và tải đè các file mới lên. Toàn bộ diễn ra ngầm định, con người không cần can thiệp.
+            </p>
+            
+            <h6 class="text-primary fw-bold mt-3">Quy trình cấu hình với GitHub Actions</h6>
+            <ol class="mb-0">
+                <li>Truy cập repo trên GitHub, vào mục <strong>Settings > Secrets and variables > Actions</strong>. Lưu các thông tin FTP thành biến bảo mật ẩn (ví dụ: <code>FTP_SERVER</code>, <code>FTP_USER</code>, <code>FTP_PASSWORD</code>) để không bị lộ mật khẩu.</li>
+                <li>Trong dự án, tạo cấu trúc thư mục <code>.github/workflows/</code> và thêm file kịch bản <code>deploy.yml</code>.</li>
+                <li>Viết kịch bản trong file <code>deploy.yml</code> với các hành động:
+                    <ul>
+                        <li><strong>Bắt sự kiện:</strong> Kích hoạt mỗi khi có lệnh <code>push</code> vào nhánh <code>main</code>.</li>
+                        <li><strong>Môi trường:</strong> Yêu cầu GitHub tạo một máy ảo Ubuntu và cài đặt .NET SDK.</li>
+                        <li><strong>Đóng gói:</strong> Chạy lệnh <code>dotnet publish -c Release</code> để tạo các file bản chuẩn.</li>
+                        <li><strong>Đồng bộ:</strong> Dùng thư viện Action hỗ trợ FTP để upload toàn bộ thư mục vừa publish lên MonsterASP.net.</li>
+                    </ul>
+                </li>
+                <li><strong>Kết quả:</strong> Từ nay, lập trình viên chỉ cần gõ <code>git push</code>. Việc kiểm tra code và tải file lên server sẽ tự động chạy trong vòng 1-2 phút.</li>
+            </ol>
+        </div>
+    </div>
+</div>

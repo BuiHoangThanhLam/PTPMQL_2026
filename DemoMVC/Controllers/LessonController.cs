@@ -9,5 +9,9 @@ namespace DemoMVC.Controllers
         {
             return View();
         }
+        public IActionResult Lesson2()
+        {
+            return View();
+        }
     }
 }
