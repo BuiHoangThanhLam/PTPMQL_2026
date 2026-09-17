@@ -1,0 +1,21 @@
+<!-- A. Lấy dữ liệu từ ViewBag: Cú pháp ngắn gọn, gọi thẳng tên biến -->
+<h2 class="text-primary">@ViewBag.PageTitle</h2>
+
+<!-- B. Lấy dữ liệu từ TempData: Kiểm tra null trước khi hiển thị -->
+@if (TempData["AlertMessage"] != null)
+{
+    <div class="alert alert-success">
+        <!-- Thông báo này sẽ tự động biến mất nếu bạn F5 (tải lại) trang -->
+        <strong>Thành công!</strong> @TempData["AlertMessage"]
+    </div>
+}
+
+<!-- C. Lấy dữ liệu từ ViewData: Bắt buộc phải ÉP KIỂU (Type Casting) về đúng dạng int -->y
+<p>Tổng số lượng thiết bị hiện có: <strong>@((int)ViewData["TotalItems"])</strong></p>
+
+<hr />
+
+<!-- Form giả lập nút bấm để kích hoạt hàm SaveDevice và test thử TempData -->
+<form asp-action="SaveDevice" method="post">
+    <button type="submit" class="btn btn-primary">Giả lập: Lưu thiết bị mới</button>
+</form>

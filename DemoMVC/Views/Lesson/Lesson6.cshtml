@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "Quản lý trạng thái trong MVC";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-uppercase fw-bold text-primary text-center">Tìm hiểu về Quản lý trạng thái (State Management)</h2>
+    <p class="text-muted text-center mb-5">HTTP là giao thức không lưu trạng thái (stateless). Để duy trì và truyền tải dữ liệu ngắn hạn giữa các thành phần trong mô hình MVC mà không cần lưu vào Database, hệ thống cung cấp 3 công cụ chính: <strong>ViewBag</strong>, <strong>ViewData</strong> và <strong>TempData</strong>.</p>
+
+    <div class="row">
+        <!-- 1. ViewBag -->
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm border-0 border-top border-info border-4">
+                <div class="card-body bg-light">
+                    <h4 class="text-info fw-bold mb-3">1. ViewBag</h4>
+                    <p class="small text-muted mb-2"><strong>Bản chất:</strong> Là thuộc tính kiểu <code>dynamic</code>. Bạn có thể tự do gán bất kỳ tên biến nào mà không cần khai báo trước.</p>
+                    <div class="bg-dark text-light p-2 rounded small mb-3">
+                        <code>ViewBag.FullName = "Bùi Lâm";</code><br>
+                        <code>ViewBag.Role = "Admin";</code>
+                    </div>
+                    <p class="small text-muted mb-2"><strong>Phạm vi:</strong> Truyền dữ liệu từ <strong>Controller -> View</strong> trong cùng một Request hiện tại. Chuyển hướng (Redirect) sẽ làm mất dữ liệu.</p>
+                    <p class="small text-muted mb-0"><strong>Đặc điểm:</strong> Cú pháp gọn, không cần ép kiểu khi gọi ở View. Nhược điểm là trình biên dịch không thể bắt lỗi nếu bạn gõ sai chính tả tên biến, dễ gây lỗi lúc chạy ứng dụng (Run-time error).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. ViewData -->
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm border-0 border-top border-success border-4">
+                <div class="card-body bg-light">
+                    <h4 class="text-success fw-bold mb-3">2. ViewData</h4>
+                    <p class="small text-muted mb-2"><strong>Bản chất:</strong> Là đối tượng Dictionary lưu trữ dữ liệu theo cặp <code>Key-Value</code> (Khóa - Giá trị).</p>
+                    <div class="bg-dark text-light p-2 rounded small mb-3">
+                        <code>ViewData["FullName"] = "Bùi Lâm";</code><br>
+                        <code>ViewData["Role"] = "Admin";</code>
+                    </div>
+                    <p class="small text-muted mb-2"><strong>Phạm vi:</strong> Giống hệt ViewBag, chỉ dùng để đẩy dữ liệu từ <strong>Controller -> View</strong> trong 1 Request duy nhất.</p>
+                    <p class="small text-muted mb-0"><strong>Đặc điểm:</strong> Tốc độ xử lý nhanh hơn ViewBag một chút. Tuy nhiên, bắt buộc phải <strong>ép kiểu (Type Casting)</strong> khi lấy dữ liệu ra ở View (VD: <code>(string)ViewData["FullName"]</code>) và cần kiểm tra NULL để tránh lỗi.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. TempData -->
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm border-0 border-top border-warning border-4">
+                <div class="card-body bg-light">
+                    <h4 class="text-warning text-dark fw-bold mb-3">3. TempData</h4>
+                    <p class="small text-muted mb-2"><strong>Bản chất:</strong> Cũng là Dictionary (Key-Value) nhưng ngầm định sử dụng Session (phiên làm việc) để lưu trữ tạm thời.</p>
+                    <div class="bg-dark text-light p-2 rounded small mb-3">
+                        <code>TempData["Alert"] = "Đã lưu thành công!";</code>
+                    </div>
+                    <p class="small text-muted mb-2"><strong>Phạm vi:</strong> Tồn tại từ Request hiện tại sang <strong>Request tiếp theo</strong>. Chuyên dùng để truyền dữ liệu <strong>giữa các Action/Controller</strong> với nhau (VD: hiển thị thông báo sau khi dùng lệnh <code>RedirectToAction</code>).</p>
+                    <p class="small text-muted mb-0"><strong>Đặc điểm:</strong> Dữ liệu <strong>tự động bị xóa ngầm</strong> ngay sau khi được đọc ở View lần đầu tiên. Cũng cần ép kiểu và kiểm tra NULL khi sử dụng tương tự như ViewData.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
