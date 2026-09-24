@@ -1,0 +1,41 @@
+@model IEnumerable<DemoMVC.Models.BenhVien>
+
+@{
+    ViewData["Title"] = "Danh sách Bệnh nhân";
+}
+
+<div class="main-content-box">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold mb-0">Danh sách Bệnh nhân</h2>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Thêm mới
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.HoTen)</th>
+                    <th>@Html.DisplayNameFor(model => model.SDT)</th>
+                    <th>@Html.DisplayNameFor(model => model.CCCD)</th>
+                    <th class="text-center" style="width: 250px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td class="fw-medium text-dark">@Html.DisplayFor(modelItem => item.HoTen)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SDT)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CCCD)</td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-sm btn-outline-primary">Sửa</a>
+                            <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-sm btn-outline-info">Chi tiết</a>
+                            <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-sm btn-outline-danger">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

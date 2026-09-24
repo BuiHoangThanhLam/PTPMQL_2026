@@ -1,0 +1,50 @@
+@model DemoMVC.Models.BenhVien
+
+@{
+    ViewData["Title"] = "Cập nhật Hồ sơ";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="main-content-box border-top border-primary border-4">
+            <h2 class="text-primary mb-4 text-center">Cập Nhật Hồ Sơ</h2>
+            <hr class="mb-4" />
+            
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <!-- Trường ẩn giữ ID gốc -->
+                <input type="hidden" asp-for="ID" />
+                
+                <div class="form-group mb-3">
+                    <label asp-for="HoTen" class="control-label"></label>
+                    <input asp-for="HoTen" class="form-control" />
+                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="SDT" class="control-label"></label>
+                    <input asp-for="SDT" class="form-control" />
+                    <span asp-validation-for="SDT" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-4">
+                    <label asp-for="CCCD" class="control-label"></label>
+                    <input asp-for="CCCD" class="form-control" />
+                    <span asp-validation-for="CCCD" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group d-grid">
+                    <input type="submit" value="Lưu Thay Đổi" class="btn btn-primary btn-lg" />
+                </div>
+            </form>
+            
+            <div class="text-center mt-4">
+                <a asp-action="Index" class="back-link">&larr; Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

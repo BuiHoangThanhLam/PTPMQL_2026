@@ -1,0 +1,216 @@
+@{
+    ViewData["Title"] = "Tài liệu chuyên sâu: EF Core & Validation";
+}
+
+<div class="container-fluid px-4 py-5 bg-light">
+    <!-- Tiêu đề trang -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-6 fw-bolder text-dark mb-3">Tài Liệu </h1>
+            <p class="lead text-secondary">Hệ thống hóa kiến thức buổi học ngày 24/09: Xây dựng chức năng CRUD dữ liệu với Entity Framework và Validate dữ liệu bằng Data Annotations.</p>
+            <hr class="w-25 mx-auto border-primary border-3 opacity-100">
+        </div>
+    </div>
+
+    <!-- CHUYÊN ĐỀ 1: ENTITY FRAMEWORK CORE & KIẾN TRÚC CRUD -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-server me-2"></i>I. Xây dựng chức năng CRUD dữ liệu với Entity Framework</h4>
+                </div>
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <p class="text-muted mb-4">Trong các ứng dụng doanh nghiệp thực tế, thao tác CRUD (Create - Read - Update - Delete) thường được thực hiện thông qua kiến trúc <strong>Bất đồng bộ (Asynchronous Programming)</strong> để tối ưu hóa hiệu suất máy chủ và tránh nghẽn luồng (Thread-blocking) khi có hàng ngàn truy vấn cùng lúc.</p>
+
+                    <div class="accordion" id="crudAccordion">
+                        <!-- CREATE -->
+                        <div class="accordion-item border-0 border-bottom">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button fw-bold text-success bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCreate">
+                                    C - Create (Thêm bản ghi mới)
+                                </button>
+                            </h2>
+                            <div id="collapseCreate" class="accordion-collapse collapse show" data-bs-parent="#crudAccordion">
+                                <div class="accordion-body text-muted">
+                                    <p>Sử dụng phương thức <code>AddAsync()</code> để đăng ký một thực thể mới vào DbContext. Trạng thái của thực thể (Entity State) sẽ được đánh dấu là <code>Added</code>.</p>
+                                    <pre class="bg-dark text-light p-3 rounded small"><code>[HttpPost]
+public async Task&lt;IActionResult&gt; Create(Device model)
+{
+    // Đăng ký đối tượng vào bộ nhớ đệm
+    await _context.Devices.AddAsync(model);
+    
+    // Ghi các thay đổi xuống Database vật lý
+    await _context.SaveChangesAsync();
+    
+    return RedirectToAction(nameof(Index));
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- READ -->
+                        <div class="accordion-item border-0 border-bottom">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold text-primary bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRead">
+                                    R - Read (Truy xuất & Tối ưu hóa truy vấn)
+                                </button>
+                            </h2>
+                            <div id="collapseRead" class="accordion-collapse collapse" data-bs-parent="#crudAccordion">
+                                <div class="accordion-body text-muted">
+                                    <p>Sử dụng <code>ToListAsync()</code> kết hợp với <code>AsNoTracking()</code> cho các truy vấn chỉ để đọc (Read-only). Điều này giúp Entity Framework bỏ qua quá trình theo dõi thay đổi, tăng tốc độ truy vấn lên đáng kể.</p>
+                                    <pre class="bg-dark text-light p-3 rounded small"><code>[HttpGet]
+public async Task&lt;IActionResult&gt; Index()
+{
+    // Lấy dữ liệu và bỏ qua Tracking để tối ưu RAM và CPU
+    var devices = await _context.Devices
+                                .AsNoTracking()
+                                .OrderByDescending(d =&gt; d.CreatedAt)
+                                .ToListAsync();
+    return View(devices);
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- UPDATE -->
+                        <div class="accordion-item border-0 border-bottom">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold text-warning bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUpdate">
+                                    U - Update (Cập nhật dữ liệu)
+                                </button>
+                            </h2>
+                            <div id="collapseUpdate" class="accordion-collapse collapse" data-bs-parent="#crudAccordion">
+                                <div class="accordion-body text-muted">
+                                    <p>Quy trình chuẩn bao gồm: Truy vấn bản ghi cần sửa -> Cập nhật các trường dữ liệu -> Đánh dấu <code>Update()</code> -> Lưu thay đổi.</p>
+                                    <pre class="bg-dark text-light p-3 rounded small"><code>[HttpPost]
+public async Task&lt;IActionResult&gt; Edit(int id, Device updateModel)
+{
+    var existingDevice = await _context.Devices.FindAsync(id);
+    if (existingDevice == null) return NotFound();
+
+    // Map dữ liệu mới
+    existingDevice.Name = updateModel.Name;
+    existingDevice.StockQuantity = updateModel.StockQuantity;
+
+    _context.Devices.Update(existingDevice);
+    await _context.SaveChangesAsync();
+    
+    return RedirectToAction(nameof(Index));
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DELETE -->
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold text-danger bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDelete">
+                                    D - Delete (Xóa bản ghi)
+                                </button>
+                            </h2>
+                            <div id="collapseDelete" class="accordion-collapse collapse" data-bs-parent="#crudAccordion">
+                                <div class="accordion-body text-muted">
+                                    <p>Phương thức <code>Remove()</code> chuyển trạng thái thực thể thành <code>Deleted</code>. EF Core sẽ tự động sinh ra câu lệnh <code>DELETE FROM...</code> khi gọi SaveChanges.</p>
+                                    <pre class="bg-dark text-light p-3 rounded small"><code>[HttpPost, ActionName("Delete")]
+public async Task&lt;IActionResult&gt; DeleteConfirmed(int id)
+{
+    var device = await _context.Devices.FindAsync(id);
+    if (device != null)
+    {
+        _context.Devices.Remove(device);
+        await _context.SaveChangesAsync();
+    }
+    return RedirectToAction(nameof(Index));
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHUYÊN ĐỀ 2: DATA ANNOTATIONS & BẢO MẬT DỮ LIỆU -->
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header bg-dark text-white py-3">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-shield-lock me-2"></i>II. Validate dữ liệu bằng Data Annotations</h4>
+                </div>
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <p class="text-muted mb-4"><strong>Data Annotations</strong> đóng vai trò như một lớp khiên phòng thủ (Defense in Depth). Nó không chỉ hỗ trợ Validate dữ liệu ở cả hai phía Client (Trình duyệt) và Server (Máy chủ), mà còn giúp định hình cấu trúc bảng (Schema) khi sử dụng EF Core Migrations.</p>
+
+                    <!-- Danh sách Attributes Nâng cao -->
+                    <div class="table-responsive mb-5">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 25%;">Attribute (Cú pháp)</th>
+                                    <th style="width: 35%;">Khái niệm & Chức năng</th>
+                                    <th style="width: 40%;">Mã minh họa thực tế (C#)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-danger">Validation</span> <code>[Required]</code></td>
+                                    <td class="text-muted small">Đảm bảo trường dữ liệu không bị giá trị NULL hoặc chuỗi rỗng. Ngăn chặn lỗi NullReferenceException.</td>
+                                    <td><code>[Required(ErrorMessage = "Thiếu tên thiết bị!")]</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">Validation</span> <code>[RegularExpression]</code></td>
+                                    <td class="text-muted small">Kiểm tra dữ liệu khớp với một biểu thức chính quy (Regex). Thường dùng cho CCCD, số điện thoại, định dạng mã sản phẩm.</td>
+                                    <td><code>[RegularExpression(@@"^DEV-\d{4}$", ErrorMessage = "Mã phải có dạng DEV-XXXX")]</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">Validation</span> <code>[Compare]</code></td>
+                                    <td class="text-muted small">So sánh giá trị của thuộc tính hiện tại với một thuộc tính khác trong cùng Model (VD: Mật khẩu và Xác nhận mật khẩu).</td>
+                                    <td><code>[Compare("Password", ErrorMessage = "Mật khẩu không khớp")]</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-info text-dark">Schema</span> <code>[Column]</code> & <code>[Table]</code></td>
+                                    <td class="text-muted small">Ghi đè cấu trúc mặc định của EF Core, cho phép đổi tên bảng hoặc cấu hình kiểu dữ liệu vật lý trong SQL (VD: varchar, decimal).</td>
+                                    <td><code>[Column(TypeName = "decimal(18,2)")]</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-secondary">UI Hint</span> <code>[DisplayFormat]</code></td>
+                                    <td class="text-muted small">Định dạng cách hiển thị dữ liệu trực quan trên giao diện View (tiền tệ, ngày tháng) mà không ảnh hưởng tới Database.</td>
+                                    <td><code>[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Flow hệ thống -->
+                    <h5 class="fw-bold text-dark border-bottom border-2 border-dark pb-2 mb-3">Kiến trúc đánh giá (Validation Workflow)</h5>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card h-100 bg-light border-0">
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-primary">1. Client-Side Validation</h6>
+                                    <p class="small text-muted mb-0">Khi gắn script <code>jquery.validate</code> vào View, trình duyệt sẽ tự động đọc các luật từ Data Annotations và sinh ra mã JavaScript tương ứng. Lỗi được chặn ngay tại form mà chưa tốn tài nguyên gửi request lên mạng.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 bg-light border-0">
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-success">2. Model Binding</h6>
+                                    <p class="small text-muted mb-0">Nếu dữ liệu vượt qua trình duyệt và đến được Server, .NET Core sẽ tự động đóng gói dữ liệu thô (JSON/Form) vào các đối tượng C#. Lúc này, framework tự động đối chiếu dữ liệu với các Data Annotations.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 bg-light border-0">
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-danger">3. Server-Side Validation</h6>
+                                    <p class="small text-muted mb-0">Bắt buộc phải sử dụng thuộc tính <code>ModelState.IsValid</code> trong Controller. Đây là chốt chặn bảo mật cuối cùng để chống lại các cuộc tấn công vượt rào Client-side.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+@model DemoMVC.Models.BenhVien
+
+@{
+    ViewData["Title"] = "Thêm mới Bệnh nhân";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="main-content-box border-top border-success border-4">
+            <h2 class="text-success mb-4 text-center">Thêm Mới Hồ Sơ</h2>
+            <hr class="mb-4" />
+            
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="ID" class="control-label"></label>
+                    <!-- Trường ID đã được khóa (readonly) như yêu cầu trước đó -->
+                    <input asp-for="ID" class="form-control bg-light" readonly />
+                    <span asp-validation-for="ID" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="HoTen" class="control-label"></label>
+                    <input asp-for="HoTen" class="form-control" placeholder="Nhập họ và tên..." />
+                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="SDT" class="control-label"></label>
+                    <input asp-for="SDT" class="form-control" placeholder="Nhập số điện thoại..." />
+                    <span asp-validation-for="SDT" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-4">
+                    <label asp-for="CCCD" class="control-label"></label>
+                    <input asp-for="CCCD" class="form-control" placeholder="Nhập căn cước công dân..." />
+                    <span asp-validation-for="CCCD" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group d-grid">
+                    <input type="submit" value="Lưu Hồ Sơ" class="btn btn-success btn-lg" />
+                </div>
+            </form>
+            
+            <div class="text-center mt-4">
+                <a asp-action="Index" class="back-link">&larr; Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

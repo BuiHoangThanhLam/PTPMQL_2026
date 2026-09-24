@@ -33,5 +33,9 @@ namespace DemoMVC.Controllers
         {
             return View();
         }
+        public IActionResult Lesson8()
+        {
+            return View();
+        }
     }
 }

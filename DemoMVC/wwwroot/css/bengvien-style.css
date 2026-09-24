@@ -1,0 +1,96 @@
+/* Thiết lập nền chung cho toàn bộ trang web */
+body {
+    background-color: #f4f6f9; /* Màu xám nhạt dịu mắt */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 1. STYLE CHO CÁC KHỐI CHỨA NỘI DUNG (CONTAINER / CARD) */
+.main-content-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Đổ bóng nhẹ tạo độ nổi */
+    margin-bottom: 30px;
+}
+
+/* 2. STYLE CHO TRANG DANH SÁCH (TABLE - INDEX) */
+.table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden; /* Cắt góc bo tròn cho bảng */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.table thead th {
+    background-color: #2c3e50; /* Xanh đen sang trọng */
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    border-bottom: none;
+    padding: 15px;
+}
+
+.table tbody tr {
+    transition: all 0.2s ease; /* Hiệu ứng chuyển động mượt */
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa; /* Sáng lên khi di chuột vào dòng */
+    transform: translateY(-1px);
+}
+
+/* 3. STYLE CHO TRANG THÊM/SỬA (FORM - CREATE/EDIT) */
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Hiệu ứng khi click chuột vào ô nhập liệu */
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+}
+
+.control-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* 4. STYLE CHO CÁC NÚT BẤM (BUTTONS) */
+.btn {
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(41, 128, 185, 0.3);
+}
+
+/* Link quay lại (Back to list) */
+.back-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: #6c757d;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    color: #343a40;
+    text-decoration: underline;
+}

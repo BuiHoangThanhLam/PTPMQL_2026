@@ -1,0 +1,30 @@
+@model DemoMVC.Models.BenhVien
+
+@{
+    ViewData["Title"] = "Chi tiết Hồ sơ";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="main-content-box border-top border-info border-4">
+            <h2 class="text-info mb-4 text-center">Chi Tiết Bệnh Nhân</h2>
+            <hr class="mb-4" />
+            
+            <dl class="row mb-4">
+                <dt class="col-sm-4 text-muted">@Html.DisplayNameFor(model => model.HoTen)</dt>
+                <dd class="col-sm-8 fw-bold">@Html.DisplayFor(model => model.HoTen)</dd>
+                
+                <dt class="col-sm-4 text-muted">@Html.DisplayNameFor(model => model.SDT)</dt>
+                <dd class="col-sm-8 fw-bold">@Html.DisplayFor(model => model.SDT)</dd>
+                
+                <dt class="col-sm-4 text-muted">@Html.DisplayNameFor(model => model.CCCD)</dt>
+                <dd class="col-sm-8 fw-bold">@Html.DisplayFor(model => model.CCCD)</dd>
+            </dl>
+            
+            <div class="d-flex justify-content-center gap-3 mt-4 border-top pt-4">
+                <a asp-action="Edit" asp-route-id="@Model?.ID" class="btn btn-primary px-4">Sửa hồ sơ</a>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">Quay lại</a>
+            </div>
+        </div>
+    </div>
+</div>

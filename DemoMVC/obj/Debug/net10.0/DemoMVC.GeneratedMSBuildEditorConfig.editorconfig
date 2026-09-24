@@ -30,6 +30,26 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/BenhVien/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVuaFZpZW5cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/BenhVien/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVuaFZpZW5cRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/BenhVien/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVuaFZpZW5cRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/BenhVien/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVuaFZpZW5cRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/BenhVien/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVuaFZpZW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/TLHT/PTPMQL2026/DemoMVC/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -72,6 +92,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/TLHT/PTPMQL2026/DemoMVC/Views/Lesson/Lesson7.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVzc29uXExlc3NvbjcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/Lesson/Lesson8.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVzc29uXExlc3NvbjguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/TLHT/PTPMQL2026/DemoMVC/Views/Shared/Error.cshtml]
