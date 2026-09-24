@@ -29,5 +29,9 @@ namespace DemoMVC.Controllers
         {
             return View();
         }
+        public IActionResult Lesson7()
+        {
+            return View();
+        }
     }
 }
