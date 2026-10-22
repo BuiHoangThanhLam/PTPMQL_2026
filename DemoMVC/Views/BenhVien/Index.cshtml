@@ -5,37 +5,89 @@
 }
 
 <div class="main-content-box">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- KHỐI TIÊU ĐỀ & CÔNG CỤ (NẰM NGANG) -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <h2 class="text-primary fw-bold mb-0">Danh sách Bệnh nhân</h2>
-        <a asp-action="Create" class="btn btn-success">
-            <i class="bi bi-plus-circle me-1"></i> Thêm mới
-        </a>
+        
+        <!-- Nhóm Tìm kiếm và Nút Thêm mới -->
+        <div class="d-flex align-items-center gap-3">
+            <!-- Thanh tìm kiếm được thu nhỏ (chiều rộng 300px) -->
+            <div class="input-group shadow-sm" style="width: 300px;">
+                <span class="input-group-text bg-white text-primary border-end-0">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" id="liveSearchInput" class="form-control border-start-0 ps-0" 
+                       placeholder="Tìm kiếm thông tin..." autocomplete="off">
+            </div>
+
+            <a asp-action="Create" class="btn btn-success text-nowrap shadow-sm">
+                <i class="bi bi-plus-circle me-1"></i> Thêm mới
+            </a>
+        </div>
     </div>
 
+    <!-- BẢNG DỮ LIỆU -->
     <div class="table-responsive">
-        <table class="table align-middle">
+        <table class="table align-middle table-hover" id="benhVienTable">
             <thead>
                 <tr>
+                    <th>Mã Bệnh Nhân</th>
                     <th>@Html.DisplayNameFor(model => model.HoTen)</th>
-                    <th>@Html.DisplayNameFor(model => model.SDT)</th>
                     <th>@Html.DisplayNameFor(model => model.CCCD)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.NgaySinh)</th>
                     <th class="text-center" style="width: 250px;">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model) {
-                    <tr>
+
+                    <tr class="searchable-row" style="cursor: pointer;" onclick="window.location.href='@Url.Action("Details", new { id = item.ID })'">
+                        <td class="text-muted fw-bold">@item.ID</td>
                         <td class="fw-medium text-dark">@Html.DisplayFor(modelItem => item.HoTen)</td>
-                        <td>@Html.DisplayFor(modelItem => item.SDT)</td>
                         <td>@Html.DisplayFor(modelItem => item.CCCD)</td>
+                        <td class="text-center text-primary fw-bold">
+                            @(DateTime.Now.Year - item.NgaySinh.Year - (DateTime.Now.DayOfYear < item.NgaySinh.DayOfYear ? 1 : 0)) tuổi
+                        </td>
                         <td class="text-center">
-                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-sm btn-outline-primary">Sửa</a>
-                            <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-sm btn-outline-info">Chi tiết</a>
-                            <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-sm btn-outline-danger">Xóa</a>
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation()">Sửa</a>
+                         
+                            <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation()">Xóa</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+        
+        <div id="noResultsMsg" class="text-center text-muted py-5" style="display: none;">
+            <i class="bi bi-search text-secondary opacity-50 mb-3" style="font-size: 3rem; display:block;"></i>
+            <h5>Không tìm thấy thông tin bệnh nhân nào phù hợp.</h5>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Lắng nghe sự kiện mỗi khi người dùng gõ phím vào ô tìm kiếm
+        document.getElementById('liveSearchInput').addEventListener('keyup', function () {
+            // Lấy từ khóa vừa gõ và chuyển hết về chữ thường để dễ so sánh
+            let searchValue = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#benhVienTable tbody .searchable-row');
+            let foundAny = false;
+            // Quét qua từng dòng dữ liệu trong bảng
+            rows.forEach(row => {
+                // row.innerText sẽ gom toàn bộ chữ trong dòng đó (cả ID, Tên, SDT...) lại thành 1 chuỗi
+                let rowText = row.innerText.toLowerCase();
+                // Nếu chuỗi đó có chứa từ khóa thì hiển thị dòng lên, không thì giấu đi
+                if (rowText.includes(searchValue)) {
+                    row.style.display = '';
+                    foundAny = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            // Nếu không có dòng nào trùng khớp, ẩn cái bảng đi và hiện thông báo lỗi
+            document.getElementById('noResultsMsg').style.display = foundAny ? 'none' : 'block';
+            document.getElementById('benhVienTable').style.display = foundAny ? 'table' : 'none';
+        });
+    </script>
+}

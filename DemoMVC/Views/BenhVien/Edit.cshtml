@@ -13,7 +13,12 @@
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                 <!-- Trường ẩn giữ ID gốc -->
-                <input type="hidden" asp-for="ID" />
+                <div class="form-group mb-3">
+                    <label asp-for="ID" class="control-label"></label>
+                    <!-- Trường ID đã được khóa (readonly) như yêu cầu trước đó -->
+                    <input asp-for="ID" class="form-control bg-light" readonly />
+                    <span asp-validation-for="ID" class="text-danger"></span>
+                </div>
                 
                 <div class="form-group mb-3">
                     <label asp-for="HoTen" class="control-label"></label>
@@ -32,7 +37,32 @@
                     <input asp-for="CCCD" class="form-control" />
                     <span asp-validation-for="CCCD" class="text-danger"></span>
                 </div>
-                
+                <div class="form-group mb-4">
+                    <label asp-for="DiaChi" class="control-label"></label>
+                    <input asp-for="DiaChi" class="form-control" />
+                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-4">
+                    <label asp-for="NgaySinh" class="control-label"></label>
+                    <input asp-for="NgaySinh" class="form-control" type="date" />
+                    <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-4">
+                    <label asp-for="GioiTinh" class="control-label"></label>
+                    <select asp-for="GioiTinh" class="form-select">
+                        <option value="">-- Chọn Giới Tính --</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
+                    <span asp-validation-for="GioiTinh" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-4">
+                    <label asp-for="TinhTrang" class="control-label"></label>
+                    <textarea asp-for="TinhTrang" class="form-control" rows="3" placeholder="Nhập mô tả tình trạng sức khoẻ hiện tại..."></textarea>
+                    <span asp-validation-for="TinhTrang" class="text-danger"></span>
+                </div>
+
+
                 <div class="form-group d-grid">
                     <input type="submit" value="Lưu Thay Đổi" class="btn btn-primary btn-lg" />
                 </div>

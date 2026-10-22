@@ -253,6 +253,7 @@ C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
 C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\scopedcss\bundle\DemoMVC.styles.css
 C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\scopedcss\projectbundle\DemoMVC.bundle.scp.css
+C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\compressed\uvw8wu3jm0-{0}-mo24tf0uyl-mo24tf0uyl.gz
 C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\compressed\uoog3p6aoc-{0}-nnrfhaty17-nnrfhaty17.gz
 C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\compressed\3xqpwvxjmo-{0}-18jhhrwj0s-18jhhrwj0s.gz
 C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\compressed\wxksowlaa2-{0}-61n19gt1b8-61n19gt1b8.gz
@@ -329,4 +330,3 @@ C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\refint\DemoMVC.dll
 C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\DemoMVC.pdb
 C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\DemoMVC.genruntimeconfig.cache
 C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\ref\DemoMVC.dll
-C:\TLHT\PTPMQL2026\DemoMVC\obj\Debug\net10.0\compressed\uvw8wu3jm0-{0}-mo24tf0uyl-mo24tf0uyl.gz

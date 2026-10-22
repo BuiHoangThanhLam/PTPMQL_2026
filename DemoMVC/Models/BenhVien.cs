@@ -15,5 +15,13 @@ namespace DemoMVC.Models
         [Required(ErrorMessage = "Bắt buộc nhập CCCD")]
         [StringLength(12, MinimumLength = 12, ErrorMessage = "CCCD phải có đúng 12 số")]
         public string CCCD { get; set; } = default!;
+        [Required(ErrorMessage = "Bắt buộc nhập địa chỉ")]
+        public string DiaChi { get; set; } = default!;
+        [Required(ErrorMessage = "Bắt buộc nhập ngày sinh")]
+        public DateTime NgaySinh { get; set; } = default!;
+        [Required(ErrorMessage = "Bắt buộc chọn giới tính")]
+        public string GioiTinh { get; set; } = default!;
+        [Required(ErrorMessage = "Tình trạng bệnh nhân là bắt buộc")]
+        public string TinhTrang { get; set; } = default!;
     }
 }
