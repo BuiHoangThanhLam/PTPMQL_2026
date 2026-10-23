@@ -1,0 +1,84 @@
+@model IEnumerable<DemoMVC.Models.SinhVien>
+
+@{
+    ViewData["Title"] = "Danh sách Sinh viên";
+}
+
+<div class="main-content-box">
+    <!-- KHỐI TIÊU ĐỀ & CÔNG CỤ (NẰM NGANG) -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <h2 class="text-primary fw-bold mb-0">Danh sách Sinh viên</h2>
+        
+        <!-- Nhóm Tìm kiếm và Nút Thêm mới -->
+        <div class="d-flex align-items-center gap-3">
+
+            <a asp-action="Create" class="btn btn-success text-nowrap shadow-sm">
+                <i class="bi bi-plus-circle me-1"></i> Thêm mới
+            </a>
+        </div>
+    </div>
+
+    <!-- BẢNG DỮ LIỆU -->
+    <div class="table-responsive">
+        <table class="table align-middle table-hover" id="sinhVienTable">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.MaSV)</th>
+                    <th>@Html.DisplayNameFor(model => model.HoTen)</th>
+                    <th>@Html.DisplayNameFor(model => model.SDT)</th>
+                    <th>@Html.DisplayNameFor(model => model.DiaChi)</th>
+                    <th>@Html.DisplayNameFor(model => model.NgaySinh)</th>
+                    <th>@Html.DisplayNameFor(model => model.GioiTinh)</th>
+                    <th>@Html.DisplayNameFor(model => model.Khoa.TenKhoa)</th>
+                    <th class="text-center" style="width: 250px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr class="searchable-row" style="cursor: pointer;" onclick="window.location.href='@Url.Action("Details", new { id = item.ID })'">
+                        <td class="text-muted fw-bold">@Html.DisplayFor(modelItem => item.MaSV)</td>
+                        <td class="fw-medium text-dark">@Html.DisplayFor(modelItem => item.HoTen)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SDT)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DiaChi)</td>
+                        <!-- Cắt giờ ở trang Index bằng cách ép định dạng ToString -->
+                        <td>@(item.NgaySinh != default ? item.NgaySinh.ToString("dd/MM/yyyy") : "")</td>
+                        <td>@Html.DisplayFor(modelItem => item.GioiTinh)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Khoa.TenKhoa)</td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation()">Sửa</a>
+                            <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation()">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+        <div id="noResultsMsg" class="text-center text-muted py-5" style="display: none;">
+            <i class="bi bi-search text-secondary opacity-50 mb-3" style="font-size: 3rem; display:block;"></i>
+            <h5>Không tìm thấy thông tin sinh viên nào phù hợp.</h5>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('liveSearchInput').addEventListener('keyup', function () {
+            let searchValue = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#sinhVienTable tbody .searchable-row');
+            let foundAny = false;
+
+            rows.forEach(row => {
+                let rowText = row.innerText.toLowerCase();
+                if (rowText.includes(searchValue)) {
+                    row.style.display = '';
+                    foundAny = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            document.getElementById('noResultsMsg').style.display = foundAny ? 'none' : 'block';
+            document.getElementById('sinhVienTable').style.display = foundAny ? 'table' : 'none';
+        });
+    </script>
+}

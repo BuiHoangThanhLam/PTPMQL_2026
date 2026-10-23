@@ -1,0 +1,86 @@
+@model DemoMVC.Models.SinhVien
+
+@{
+    ViewData["Title"] = "Thêm mới Sinh viên";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="main-content-box border-top border-success border-4">
+            <h2 class="text-success mb-4 text-center">Thêm Mới Sinh Viên</h2>
+            <hr class="mb-4" />
+            
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                
+                <!-- Dropdown chọn Khoa/Ngành -->
+                <div class="form-group mb-3">
+                    <label asp-for="KhoaID" class="control-label"></label>
+                    <select asp-for="KhoaID" class="form-control" asp-items="ViewBag.KhoaID">
+                        <option value="">-- Chọn Khoa / Ngành học --</option>
+                    </select>
+                </div>
+
+                <!-- Năm nhập học -->
+                <div class="form-group mb-3">
+                    <label asp-for="NamNhapHoc" class="control-label"></label>
+                    <input asp-for="NamNhapHoc" class="form-control" type="number" min="2000" max="2100" />
+                </div>
+
+                <!-- Dropdown Hệ đào tạo -->
+                <div class="form-group mb-3">
+                    <label asp-for="HeDaoTao" class="control-label"></label>
+                    <select asp-for="HeDaoTao" class="form-control">
+                        <option value="21">Đại học chính quy (21)</option>
+                        <option value="22">Đại học liên thông (22)</option>
+                        <option value="23">Đại học từ xa (23)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="HoTen" class="control-label"></label>
+                    <input asp-for="HoTen" class="form-control" placeholder="Nhập họ và tên..." />
+                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="SDT" class="control-label"></label>
+                    <input asp-for="SDT" class="form-control" placeholder="Nhập số điện thoại..." />
+                    <span asp-validation-for="SDT" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="DiaChi" class="control-label"></label>
+                    <input asp-for="DiaChi" class="form-control" placeholder="Nhập địa chỉ..." />
+                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="NgaySinh" class="control-label"></label>
+                    <input asp-for="NgaySinh" class="form-control" type="date" />
+                    <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-4">
+                    <label asp-for="GioiTinh" class="control-label"></label>
+                    <select asp-for="GioiTinh" class="form-control">
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
+                </div>
+                
+                <div class="form-group d-grid">
+                    <input type="submit" value="Lưu Hồ Sơ" class="btn btn-success btn-lg" />
+                </div>
+            </form>
+            
+            <div class="text-center mt-4">
+                <a asp-action="Index" class="back-link">&larr; Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

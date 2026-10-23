@@ -32,14 +32,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="BenhVien" asp-action="Index">Bệnh viện</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="SinhVien" asp-action="Index">Sinh viên</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Khoa" asp-action="Index">Khoa</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container mt-4">
         <main role="main" class="pb-3">
-            @RenderBody()
+            <!-- Đưa class main-content-box (khối trắng bo góc) bọc lấy lệnh RenderBody -->
+            <div class="main-content-box bg-white p-4 rounded-4 shadow-sm border-top border-primary border-4">
+                @RenderBody()
+            </div>
         </main>
     </div>
 

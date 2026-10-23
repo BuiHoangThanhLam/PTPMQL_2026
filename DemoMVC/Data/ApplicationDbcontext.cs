@@ -9,5 +9,7 @@ namespace DemoMVC.Data
         public DbSet<Employee> Employees { get; set; } = default!;
         public DbSet<BenhVien> BenhViens { get; set; } = default!;
         public object BenhVien { get; internal set; }
+        public DbSet<SinhVien> SinhViens { get; set; } = default!;
+        public DbSet<Khoa> Khoa { get; set; } = default!;
     }
 }

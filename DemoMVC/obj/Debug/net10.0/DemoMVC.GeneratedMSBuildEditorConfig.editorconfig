@@ -66,6 +66,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW52ZW50b3J5XFNlYXJjaC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/Khoa/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hvYVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/Khoa/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hvYVxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/Khoa/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hvYVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/Khoa/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hvYVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/Khoa/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hvYVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/TLHT/PTPMQL2026/DemoMVC/Views/Lesson/Lesson1.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVzc29uXExlc3NvbjEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -132,6 +152,26 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/TLHT/PTPMQL2026/DemoMVC/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/SinhVien/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2luaFZpZW5cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/SinhVien/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2luaFZpZW5cRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/SinhVien/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2luaFZpZW5cRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/SinhVien/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2luaFZpZW5cRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TLHT/PTPMQL2026/DemoMVC/Views/SinhVien/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2luaFZpZW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/TLHT/PTPMQL2026/DemoMVC/Views/Student/Index.cshtml]

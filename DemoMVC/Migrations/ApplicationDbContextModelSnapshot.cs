@@ -70,6 +70,73 @@ namespace DemoMVC.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("DemoMVC.Models.Khoa", b =>
+                {
+                    b.Property<int>("KhoaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MaNganh")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TenKhoa")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("KhoaID");
+
+                    b.ToTable("Khoa");
+                });
+
+            modelBuilder.Entity("DemoMVC.Models.SinhVien", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DiaChi")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GioiTinh")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HeDaoTao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HoTen")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("KhoaID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MaSV")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("NamNhapHoc")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("NgaySinh")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SDT")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("KhoaID");
+
+                    b.ToTable("SinhViens");
+                });
+
             modelBuilder.Entity("DemoMVC.Models.Student", b =>
                 {
                     b.Property<string>("StudentCode")
@@ -89,6 +156,22 @@ namespace DemoMVC.Migrations
                     b.HasKey("StudentCode");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("DemoMVC.Models.SinhVien", b =>
+                {
+                    b.HasOne("DemoMVC.Models.Khoa", "Khoa")
+                        .WithMany("SinhViens")
+                        .HasForeignKey("KhoaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Khoa");
+                });
+
+            modelBuilder.Entity("DemoMVC.Models.Khoa", b =>
+                {
+                    b.Navigation("SinhViens");
                 });
 #pragma warning restore 612, 618
         }

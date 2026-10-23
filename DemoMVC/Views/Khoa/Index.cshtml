@@ -1,0 +1,39 @@
+@model IEnumerable<DemoMVC.Models.Khoa>
+
+@{
+    ViewData["Title"] = "Danh sách Khoa";
+}
+
+<div class="main-content-box">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold mb-0">Danh mục Khoa - Ngành</h2>
+        <a asp-action="Create" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i> Thêm Khoa Mới
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.TenKhoa)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.MaNganh)</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td class="fw-bold text-dark">@Html.DisplayFor(modelItem => item.TenKhoa)</td>
+                        <td class="text-center text-primary fw-bold">@Html.DisplayFor(modelItem => item.MaNganh)</td>
+                        <td class="text-center">
+                            <!-- Nút Edit/Delete có thể làm sau -->
+                            <a href="#" class="btn btn-sm btn-outline-primary">Sửa</a>
+                            <a href="#" class="btn btn-sm btn-outline-danger">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
