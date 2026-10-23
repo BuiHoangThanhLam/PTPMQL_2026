@@ -1,0 +1,51 @@
+
+name: Deploy .NET 10 MVC to MonsterASP.net
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish project
+        run: dotnet publish ./DemoMVC/DemoMVC.csproj -c Release -o ./publish
+
+      - name: Stop Server
+        run: |
+          echo "<html><body><h1>Updating...</h1></body></html>" > app_offline.htm
+          curl -s --ftp-pasv -u "$FTP_USERNAME:$FTP_PASSWORD" -T app_offline.htm "ftp://$FTP_SERVER/wwwroot/app_offline.htm"
+
+      - name: Deploy App
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          protocol: ftp
+          local-dir: ./publish/
+          server-dir: /wwwroot/
+          security: loose
+          exclude: |
+            **/app_offline.htm
+
+      - name: Start Server
+        if: always()
+        run: |
+          curl -s --ftp-pasv -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_SERVER/" -Q "-DELE /wwwroot/app_offline.htm" || true
