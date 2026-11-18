@@ -1,0 +1,119 @@
+@model DemoMVC.Models.ViewModels.PermissionMatrixViewModel
+
+@{
+    ViewData["Title"] = "Quản lý phân quyền động";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="text-primary fw-bold mb-1">Quản lý phân quyền</h2>
+        <div class="text-secondary">Cấu hình quyền truy cập theo từng Role</div>
+    </div>
+</div>
+
+<div class="table-responsive border rounded">
+    <table class="table table-bordered table-hover align-middle mb-0">
+        <thead class="table-light text-center">
+            <tr>
+                <th style="min-width: 280px;">Controller / Action</th>
+                @foreach (var role in Model.Roles)
+                {
+                    <th>@(role.Name ?? "Không tên")</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Rows.Count == 0)
+            {
+                <tr>
+                    <td colspan="@(Model.Roles.Count + 1)" class="text-center text-secondary py-5">
+                        Không tìm thấy Controller/Action nào.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        <td>
+                            <span class="fw-semibold">@row.ControllerName</span>
+                            <span class="text-secondary"> / @row.ActionName</span>
+                        </td>
+                        @foreach (var role in Model.Roles)
+                        {
+                            var isGranted = role.Id is not null &&
+                                Model.GrantedPermissions.TryGetValue(role.Id, out var grantedKeys) &&
+                                grantedKeys.Contains(row.Key, StringComparer.OrdinalIgnoreCase);
+
+                            <td class="text-center">
+                                <input type="checkbox"
+                                       class="form-check-input permission-checkbox"
+                                       role="switch"
+                                       aria-label="Quyền @row.ControllerName/@row.ActionName cho @(role.Name ?? "role")"
+                                       data-role-id="@role.Id"
+                                       data-controller="@row.ControllerName"
+                                       data-action-name="@row.ActionName"
+                                       checked="@isGranted" />
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="permissionToast" class="toast text-bg-success border-0" role="alert" aria-live="polite" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="permissionToastMessage"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Html.AntiForgeryToken()
+    <script>
+        (function () {
+            const antiForgeryToken = $('input[name="__RequestVerificationToken"]').val();
+
+            function showToast(message, isError) {
+                const toastElement = document.getElementById('permissionToast');
+                toastElement.classList.toggle('text-bg-success', !isError);
+                toastElement.classList.toggle('text-bg-danger', isError);
+                document.getElementById('permissionToastMessage').textContent = message;
+                bootstrap.Toast.getOrCreateInstance(toastElement).show();
+            }
+
+            $('.permission-checkbox').on('change', function () {
+                const checkbox = $(this);
+                const originalValue = checkbox.prop('checked');
+
+                checkbox.prop('disabled', true);
+
+                $.ajax({
+                    url: '@Url.Action("UpdatePermission", "Permissions")',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: antiForgeryToken,
+                        roleId: checkbox.data('role-id'),
+                        controllerName: checkbox.data('controller'),
+                        actionName: checkbox.data('action-name'),
+                        isGranted: originalValue
+                    }
+                }).done(function (result) {
+                    showToast(result.message, false);
+                }).fail(function (xhr) {
+                    // Hoàn tác checkbox nếu máy chủ từ chối thay đổi.
+                    checkbox.prop('checked', !originalValue);
+                    const message = xhr.responseJSON?.message || 'Không thể cập nhật phân quyền.';
+                    showToast(message, true);
+                }).always(function () {
+                    checkbox.prop('disabled', false);
+                });
+            });
+        })();
+    </script>
+}
