@@ -1,0 +1,166 @@
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <h2 class="text-primary fw-bold mb-0">Quản lý sản phẩm</h2>
+    <button type="button" id="btnCreateProduct" class="btn btn-success">
+        <i class="bi bi-plus-circle me-1"></i> Thêm mới
+    </button>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-8">
+        <input type="search"
+               id="searchBox"
+               class="form-control"
+               placeholder="Tìm theo mã SKU, tên hoặc danh mục..."
+               autocomplete="off" />
+    </div>
+    <div class="col-md-4">
+        <select id="pageSize" class="form-select" aria-label="Số dòng trên trang">
+            <option value="10">10 dòng / trang</option>
+            <option value="25">25 dòng / trang</option>
+            <option value="50">50 dòng / trang</option>
+        </select>
+    </div>
+</div>
+
+<div id="tableContainer" aria-live="polite">
+    <div class="text-center py-5 text-secondary">
+        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+        Đang tải dữ liệu...
+    </div>
+</div>
+
+<div id="modalContainer"></div>
+@Html.AntiForgeryToken()
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="appToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="appToastMessage"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const tableUrl = '@Url.Action("Table", "Products")';
+            let searchTimer;
+
+            function showToast(message, isError = false) {
+                const toastElement = document.getElementById('appToast');
+                toastElement.classList.toggle('text-bg-success', !isError);
+                toastElement.classList.toggle('text-bg-danger', isError);
+                document.getElementById('appToastMessage').textContent = message;
+                bootstrap.Toast.getOrCreateInstance(toastElement).show();
+            }
+
+            function loadTable(page = 1) {
+                $.get(tableUrl, {
+                    search: $('#searchBox').val(),
+                    page: page,
+                    pageSize: $('#pageSize').val()
+                }).done(function (html) {
+                    $('#tableContainer').html(html);
+                }).fail(function () {
+                    showToast('Không thể tải danh sách sản phẩm.', true);
+                });
+            }
+
+            function openModal(url) {
+                $.get(url)
+                    .done(function (html) {
+                        $('#modalContainer').html(html);
+                        const modalElement = document.querySelector('#modalContainer .modal');
+                        if (modalElement) {
+                            bootstrap.Modal.getOrCreateInstance(modalElement).show();
+                        }
+                    })
+                    .fail(function () {
+                        showToast('Không thể mở cửa sổ.', true);
+                    });
+            }
+
+            $('#searchBox').on('keyup', function () {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(() => loadTable(1), 300);
+            });
+
+            $('#pageSize').on('change', () => loadTable(1));
+
+            $('#btnCreateProduct').on('click', function () {
+                openModal('@Url.Action("Create", "Products")');
+            });
+
+            $('#tableContainer').on('click', '[data-page]', function (event) {
+                event.preventDefault();
+                loadTable($(this).data('page'));
+            });
+
+            $('#tableContainer').on('click', '[data-action="edit"], [data-action="details"]', function () {
+                openModal($(this).data('url'));
+            });
+
+            $('#tableContainer').on('click', '[data-action="delete"]', function () {
+                if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+                    return;
+                }
+
+                const button = $(this);
+                const token = $('input[name="__RequestVerificationToken"]').val();
+
+                $.ajax({
+                    url: button.data('url'),
+                    type: 'POST',
+                    data: { __RequestVerificationToken: token }
+                }).done(function (result) {
+                    showToast(result.message);
+                    loadTable();
+                }).fail(function () {
+                    showToast('Xóa sản phẩm không thành công.', true);
+                });
+            });
+
+            $('#modalContainer').on('submit', '#productForm', function (event) {
+                event.preventDefault();
+                const form = $(this);
+
+                if (!form.valid()) {
+                    return;
+                }
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize()
+                }).done(function (result) {
+                    bootstrap.Modal.getInstance(document.querySelector('#modalContainer .modal'))?.hide();
+                    showToast(result.message);
+                    loadTable();
+                }).fail(function (xhr) {
+                    if (xhr.status === 400 && xhr.responseText) {
+                        $('#modalContainer').html(xhr.responseText);
+                        const modalElement = document.querySelector('#modalContainer .modal');
+                        if (modalElement) {
+                            bootstrap.Modal.getOrCreateInstance(modalElement).show();
+                            $.validator.unobtrusive.parse('#productForm');
+                        }
+                    } else {
+                        showToast('Không thể lưu sản phẩm.', true);
+                    }
+                });
+            });
+
+            $('#modalContainer').on('hidden.bs.modal', '.modal', function () {
+                $(this).remove();
+            });
+
+            loadTable();
+        })();
+    </script>
+}

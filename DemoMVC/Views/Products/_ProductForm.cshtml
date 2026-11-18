@@ -1,0 +1,104 @@
+@model DemoMVC.Models.Entities.Product
+
+@{
+    var mode = (string?)ViewBag.ModalMode ?? "Details";
+    var isDetails = mode == "Details";
+    var title = mode == "Edit"
+        ? "Cập nhật sản phẩm"
+        : mode == "Create"
+            ? "Thêm sản phẩm"
+            : "Chi tiết sản phẩm";
+    var formAction = mode == "Edit"
+        ? Url.Action("Edit", "Products", new { id = Model.Id })
+        : Url.Action("Create", "Products");
+}
+
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalTitle">@title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+
+            @if (isDetails)
+            {
+                <div class="modal-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">SKU</dt>
+                        <dd class="col-sm-8">@Model.Sku</dd>
+                        <dt class="col-sm-4">Tên sản phẩm</dt>
+                        <dd class="col-sm-8">@Model.Name</dd>
+                        <dt class="col-sm-4">Danh mục</dt>
+                        <dd class="col-sm-8">@(Model.Category?.Name ?? "-")</dd>
+                        <dt class="col-sm-4">Giá mua</dt>
+                        <dd class="col-sm-8">@Model.PurchasePrice.ToString("N0") ₫</dd>
+                        <dt class="col-sm-4">Giá bán</dt>
+                        <dd class="col-sm-8">@Model.SellingPrice.ToString("N0") ₫</dd>
+                        <dt class="col-sm-4">Tồn kho</dt>
+                        <dd class="col-sm-8">@Model.StockQuantity @Model.Unit</dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            }
+            else
+            {
+                <form id="productForm" method="post" action="@formAction" novalidate>
+                    @Html.AntiForgeryToken()
+                    <input asp-for="Id" type="hidden" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mx-3 mt-3 mb-0"></div>
+
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label asp-for="Sku" class="form-label">Mã SKU</label>
+                                <input asp-for="Sku" class="form-control" />
+                                <span asp-validation-for="Sku" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <label asp-for="Name" class="form-label">Tên sản phẩm</label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="CategoryId" class="form-label">Danh mục</label>
+                                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
+                                    <option value="">-- Chọn danh mục --</option>
+                                </select>
+                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Unit" class="form-label">Đơn vị</label>
+                                <input asp-for="Unit" class="form-control" placeholder="Cái, hộp, bó..." />
+                                <span asp-validation-for="Unit" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="PurchasePrice" class="form-label">Giá mua</label>
+                                <input asp-for="PurchasePrice" type="number" min="0" step="0.01" class="form-control" />
+                                <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="SellingPrice" class="form-label">Giá bán</label>
+                                <input asp-for="SellingPrice" type="number" min="0" step="0.01" class="form-control" />
+                                <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="StockQuantity" class="form-label">Tồn kho</label>
+                                <input asp-for="StockQuantity" type="number" min="0" step="1" class="form-control" />
+                                <span asp-validation-for="StockQuantity" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">
+                            @(mode == "Edit" ? "Cập nhật" : "Thêm mới")
+                        </button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>
